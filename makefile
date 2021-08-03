@@ -25,6 +25,9 @@ mariadb10-3:
 mariadb-server:
 	- docker-compose up -d mariadb10_1 mariadb10_3 phpmyadmin
 
+mysql8:
+	- docker-compose up -d mysql8 phpmyadmin
+
 mysql57:
 	- docker-compose up -d mysql57 phpmyadmin
 

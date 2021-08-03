@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+    mysql8:
+        image: mysql:latest
+        container_name: mysql8
+        env_file: ./mysql/8/.env
+        ports:
+            - "3308:3306"
+        volumes:
+            - ./mysql/8/lib:/var/lib/mysql
+        restart: always
+
     mysql57:
         image: mysql:5.7
         container_name: mysql57
@@ -47,9 +57,10 @@ services:
         environment:
             - "PMA_ABSOLUTE_URI=http://www.pma.test"
             - "VIRTUAL_HOST=www.pma.test"
-            - "PMA_HOSTS=mysql55,mysql57,mariadb10_1,mariadb10_3"
+            - "PMA_HOSTS=mysql8,mysql57,mysql55,mariadb10_1,mariadb10_3"
         ports:
             - 8888:80
+        restart: always
 
     mailhog:
         image: mailhog/mailhog
