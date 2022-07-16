@@ -1,5 +1,5 @@
 all-db:
-	- docker-compose up -d mariadb10_1 mariadb10_3 mysql57 mysql55 phpmyadmin
+	- docker-compose up -d mariadb10_7 mariadb10_3 mysql57 mysql55 mysql8 phpmyadmin
 
 install-php-7.1:
 	- sudo apt install php7.1-fpm php7.1-cli php7.1-json php7.1-mysql php7.1-xsl php7.1-ldap php7.1-sqlite3 php7.1-xml php7.1-zip php7.1-curl php7.1-intl php7.1-mbstring
@@ -10,14 +10,11 @@ install-php-7.2:
 install-php-7.4:
 	- sudo apt install php7.4-fpm php7.4-cli php7.4-json php7.4-mysql php7.4-xsl php7.4-ldap php7.4-sqlite3 php7.4-xml php7.4-zip php7.4-curl php7.4-intl php7.4-mbstring
 
-ldap-server:
-	- docker-compose up -d ldap phpldapadmin
-
 mailhog-server:
 	- docker-compose up -d mailhog
 
-mariadb10-1:
-	- docker-compose up -d mariadb10_1 phpmyadmin
+mariadb10-7:
+	- docker-compose up -d mariadb10_7 phpmyadmin
 
 mariadb10-3:
 	- docker-compose up -d mariadb10_3 phpmyadmin
@@ -52,3 +49,11 @@ switch-php-7.2:
 	- sudo update-alternatives --set php /usr/bin/php7.2
 	- sudo update-alternatives --set phar /usr/bin/phar7.2
 	- sudo update-alternatives --set phar.phar /usr/bin/phar.phar7.2
+
+env_files:
+	- cp  mysql/5.5/.env.dist mysql/5.5/.env
+	- cp  mysql/5.7/.env.dist mysql/5.7/.env
+	- cp  mysql/8.0/.env.dist mysql/8.0/.env
+	- cp  mariadb/10.7/.env.dist mariadb/10.7/.env
+	- cp  mariadb/10.3/.env.dist mariadb/10.3/.env
+	- cp  minio/.env.dist minio/.env

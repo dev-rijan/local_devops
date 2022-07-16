@@ -2,14 +2,13 @@ version: '3'
 
 services:
     mysql8:
-        image: mysql:latest
+        image: mysql:8.0
         container_name: mysql8
-        env_file: ./mysql/8/.env
+        env_file: ./mysql/8.0/.env
         ports:
             - "3308:3306"
         volumes:
-            - ./mysql/8/lib:/var/lib/mysql
-        restart: always
+            - ./mysql/8.0/lib:/var/lib/mysql
 
     mysql57:
         image: mysql:5.7
@@ -31,15 +30,15 @@ services:
             - ./mysql/5.5/conf.d:/etc/mysql/conf.d
             - ./mysql/5.5/lib:/var/lib/mysql
 
-    mariadb10_1:
-        image: mariadb:10.1
-        container_name: mariadb10_1
-        env_file: ./mariadb/10.1/.env
+    mariadb10_7:
+        image: mariadb:10.7
+        container_name: mariadb10_7
+        env_file: ./mariadb/10.7/.env
         ports:
-            - "3308:3306"
+            - "3357:3306"
         volumes:
-            - ./mariadb/10.1/conf.d:/etc/mariadb/conf.d
-            - ./mariadb/10.1/lib:/var/lib/mariadb
+            - ./mariadb/10.7/conf.d:/etc/mariadb/conf.d
+            - ./mariadb/10.7/lib:/var/lib/mariadb
 
     mariadb10_3:
         image: mariadb:10.3
@@ -57,7 +56,7 @@ services:
         environment:
             - "PMA_ABSOLUTE_URI=http://www.pma.test"
             - "VIRTUAL_HOST=www.pma.test"
-            - "PMA_HOSTS=mysql8,mysql57,mysql55,mariadb10_1,mariadb10_3"
+            - "PMA_HOSTS=mysql8,mysql57,mysql55,mariadb10_7,mariadb10_3"
         ports:
             - 8888:80
         restart: always
@@ -70,44 +69,15 @@ services:
             - 8025:8025
 
     minio:
-        command: server /export
+        command: server /data --console-address ":9001"
         container_name: minio
         image: minio/minio
-        environment:
-            MINIO_ACCESS_KEY: uat
-            MINIO_SECRET_KEY: tapailaigastochha
+        env_file: ./minio/.env
         volumes:
-            - ./minio/data:/export
+            - ./minio/data:/data
         ports:
             - 9000:9000
-
-    ldap:
-        container_name: ldap
-        environment:
-            - "LDAP_DOMAIN=united-asian.test"
-            - "LDAP_ADMIN_PASSWORD=test456"
-        hostname: ldap.united-asian.test
-        image: osixia/openldap:1.1.8
-        ports:
-            - 389:389
-            - 636:636
-#        volumes:
-#          - ./ldap/data:/var/lib/ldap
-#          - ./ldap/config:/etc/ldap/slapd.d
-
-    phpldapadmin:
-        container_name: phpldapadmin
-        depends_on:
-            - ldap
-        environment:
-            - "PHPLDAPADMIN_LDAP_HOSTS=ldap"
-            - "PHPLDAPADMIN_HTTPS=false"
-        hostname: phpldapadmin
-        image: osixia/phpldapadmin:0.7.2
-        links:
-            - ldap:ldap
-        ports:
-            - 8026:80
+            - 9001:9001
 
 networks:
     default:
