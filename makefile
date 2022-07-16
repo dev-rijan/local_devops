@@ -20,7 +20,7 @@ mariadb10-3:
 	- docker-compose up -d mariadb10_3 phpmyadmin
 
 mariadb-server:
-	- docker-compose up -d mariadb10_1 mariadb10_3 phpmyadmin
+	- docker-compose up -d mariadb10_7 mariadb10_3 phpmyadmin
 
 mysql8:
 	- docker-compose up -d mysql8 phpmyadmin
@@ -32,7 +32,7 @@ mysql55:
 	- docker-compose up -d mysql55 phpmyadmin
 
 mysql:
-	- docker-compose up -d mysql57 mysql55 phpmyadmin
+	- docker-compose up -d mysql8 mysql57 mysql55 phpmyadmin
 
 minio-server:
 	- docker-compose up -d minio
@@ -49,6 +49,11 @@ switch-php-7.2:
 	- sudo update-alternatives --set php /usr/bin/php7.2
 	- sudo update-alternatives --set phar /usr/bin/phar7.2
 	- sudo update-alternatives --set phar.phar /usr/bin/phar.phar7.2
+
+switch-php-7.4:
+	- sudo update-alternatives --set php /usr/bin/php7.4
+	- sudo update-alternatives --set phar /usr/bin/phar7.4
+	- sudo update-alternatives --set phar.phar /usr/bin/phar.phar7.4
 
 env_files:
 	- cp  mysql/5.5/.env.dist mysql/5.5/.env
