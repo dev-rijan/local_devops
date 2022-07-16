@@ -1,38 +1,29 @@
 ## Mysql, Minio, Mailhog, Phpmyadmin and Php for devs.
 
 - if you are running the containers first time, we need to create a common network
+```
+make network
+```
 
-  - run `make network`
-
-- create `.env` file under `\mysql\5.5`, `\mysql\5.7`, `\mariadb\10.1`, `\mariadb\10.3`
-
-  - You can override the mysql root password in the `.env` file.
-
-- You can then run `make mysql55`, `make mysql57` or `make mysql` to run containers with mysql 5.5, 5.7 or both respectively.
-
-- You can run `make minio-server` to start a minio server
-
-- you can run `make mailhog-server` to start a mailhog server
-
-- you can install php7.1 and php7.2 and switch between version in your host
-  - run `make install-php-7.1` to install php 7.1 fpm and related extensions
-  - run `make install-php-7.2` to install php 7.2 fpm and related extensions
-  - run `make switch-php-7.1` to switch to php 7.1 such that php points to 7.1
-  - run `make switch-php-7.2` to switch to php 7.2 such that php points to 7.2
+- Generate `.env` file form env.dist. `.env` files are located on `mysql/{version}/.env`, `mariadb/{version}/.env`, `minio/.env` for `mysql`, `mariadb` and `minio` respectively. You can add or update configuration (mysql root password, minio user and password etc) by overiding config in `.env` file.
+```
+make env_files
+```
 
 ## Mysql containers
 
-MYSQL containers are created for versions 5.5, 5.6 and 5.7 of MYSQL, based on the official MYSQL docker images.
+MYSQL containers are created for versions 5.5, 5.7 and 8 of MYSQL, based on the official MYSQL docker images.  
+MariaDB containers are created for versions 10.3 and 10.7 of MariaDB, based on the official MariaDB docker images.
 
-Each MYSQL container is accessible from the host (address 127.0.0.1). Each container uses a different port on the host:
+Each MYSQL and MariaDB container is accessible from the host (address 127.0.0.1). Each container uses a different port on the host:
 
-| Container   | Version | Port on host | Port on container |
-| ----------- | ------- | ------------ | ----------------- |
-| mysql55     | 5.5     | 3355         | 3306              |
-| mysql57     | 5.7     | 3307         | 3306              |
-| mysql8      | 8.0     | 3308         | 3306              |
-| mariadb10_3 | 10.3    | 3308         | 3306              |
-| mariadb10_7 | 10.7    | 3356         | 3306              |
+| command to run container   | Container   | Version | Port on host | Port on container |
+| -------------------------- | ----------- | ------- | ------------ | ----------------- |
+| make mysql55               | mysql55     | 5.5     | 3305         | 3306              |
+| make mysql57               | mysql57     | 5.7     | 3307         | 3306              |
+| make mysql8                | mysql8      | 8.0     | 3308         | 3306              |
+| mariadb10-3                | mariadb10_3 | 10.3    | 3356         | 3306              |
+| mariadb10-7                | mariadb10_7 | 10.7    | 3357         | 3306              |
 
 The mysql configuation is set under `mysql/{version}/conf.d`.
 
@@ -51,17 +42,39 @@ The mariadb data is stored under `mariadb/{version}/lib`.
 You can access phpmyadmin using url `localhost:8888` Or `http://www.pma.test` if you have www.pma.test pointed to you localhost
 
 ## Minio
+[Minio](https://min.io/) is native object storage compatible with AWS s3.  
+Run container using
+```
+make minio-server
+```
+You can overide root user and root password by updating `.env` file.
 
-| Container | Port on host | Port on container | Access Key | Secret            |
+| Container | Port on host | Port on container | Rootuser   | Root password     |
 | --------- | ------------ | ----------------- | ---------- | ----------------- |
-| minio     | 9000         | 9000              | uat        | tapailaigastochha |
+| minio     | 9000         | 9000              | minio      | miniominio        |
 
 You can access minio server using url `localhost:9000`
 
 ## Mailhog
+[Mailhog](https://github.com/mailhog/MailHog) is Web and API based SMTP testing.  
+Run container using
+```
+make mailhog-server
+```
 
 | Container | UI Port on host | SMTP port on host | SMTP port on container |
 | --------- | --------------- | ----------------- | ---------------------- |
 | mailhog   | 8025            | 1025              | 1025                   |
 
 You can access minio server using url `localhost:8025`
+
+## Install and switch php versions  
+you can install php7.1, php7.2 and php7.4 and switch between version in your host  
+you can also install other php version just like command written in make file but make sure you have add correct php repository.
+  - run `make install-php-7.1` to install php 7.1 fpm and related extensions
+  - run `make install-php-7.2` to install php 7.2 fpm and related extensions
+  - run `make install-php-7.4` to install php 7.4 fpm and related extensions
+  - run `make switch-php-7.1` to switch to php 7.1 such that php points to 7.1
+  - run `make switch-php-7.2` to switch to php 7.2 such that php points to 7.2
+  - run `make switch-php-7.4` to switch to php 7.4 such that php points to 7.4
+
