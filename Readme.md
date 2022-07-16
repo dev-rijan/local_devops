@@ -1,10 +1,12 @@
-## Mysql, Minio, Mailhog, Phpmyadmin and Php for devs.
+## About the project.
+Local development environment setup including different version of MySQL, MariaDB, Phpmyadmin, Minio and Mailhog.
 
+## Installation
+- clone the Repo
 - if you are running the containers first time, we need to create a common network
 ```
 make network
 ```
-
 - Generate `.env` file form env.dist. `.env` files are located on `mysql/{version}/.env`, `mariadb/{version}/.env`, `minio/.env` for `mysql`, `mariadb` and `minio` respectively. You can add or update configuration (mysql root password, minio user and password etc) by overiding config in `.env` file.
 ```
 make env_files
